@@ -1,0 +1,9 @@
+{
+  "short_name": "Ân & Hạ",
+  "name": "Lễ Đám Cưới - Ân & Hạ",
+  "description": "Thiệp mời online lễ đám cưới của Ân & Hạ",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#9E8A78",
+  "background_color": "#FDFBF7"
+}
