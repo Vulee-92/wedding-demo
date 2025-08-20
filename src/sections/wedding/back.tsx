@@ -183,7 +183,7 @@ export function WeddingGiftSection() {
           </Typography>
           {/* Ghi chú thêm cho khách mời */}
           <Typography className="title-sans">
-            Do đang sinh sống tại nước ngoài, Ân & Hạ xin phép được nhận những món quà mừng cưới qua tài khoản của người thân tại Việt Nam. <br /> Xin chân thành cảm ơn.💖
+       Xin chân thành cảm ơn.💖
           </Typography>
           <Box sx={{ width: '100%', mt: 4 }} />
         </MainTitle>

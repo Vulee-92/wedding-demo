@@ -303,7 +303,7 @@ const handleMusicChoice = async (choice: boolean) => {
       <WeddingLayout onViewIntroAgain={handleViewIntroAgain}>
         <CoverSection />
         <BibleSection />
-        <EventSection />
+        {/* <EventSection /> */}
         <WelcomeSection detailsRef={detailsRef} />
         <CountdownSection />
         <EventDetailsSection />

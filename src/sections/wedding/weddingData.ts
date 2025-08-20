@@ -106,6 +106,8 @@ export const weddingData = {
       "https://res.cloudinary.com/dxfsa7foy/image/upload/v1755705139/mainnn_hnuhb2.jpg",
       "https://res.cloudinary.com/dxfsa7foy/image/upload/v1755705468/33_mvp4l6.jpg",
       "https://res.cloudinary.com/dxfsa7foy/image/upload/v1755705800/8815fb0fff5e0d4afe37111a1b495b86_htmfnb.jpg",
+      "https://res.cloudinary.com/dxfsa7foy/image/upload/v1755707738/e2f8e0c26532f18c2afa3ffccb42f7b5_qzjnlh.jpg",
+      "https://res.cloudinary.com/dxfsa7foy/image/upload/v1755707740/0248a6896d7e2ca72378c03170763124_lqkrdg.jpg",
       "https://res.cloudinary.com/dxfsa7foy/image/upload/v1755705805/626134c56786537178e30f3959b2dd1b_yioj7z.jpg",
       "https://res.cloudinary.com/dxfsa7foy/image/upload/v1755705803/6967bdbb91b723372b4f83b3c79ba111_tvuoyt.jpg",
       "https://res.cloudinary.com/dxfsa7foy/image/upload/v1755705384/D_b0qwxa.jpg",

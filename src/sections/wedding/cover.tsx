@@ -42,6 +42,7 @@ const BackgroundImage = styled('div')(() => ({
     width: '100%',
     height: '100%',
     objectFit: 'cover',
+    
   },
 }));
 
@@ -58,7 +59,7 @@ const ContentWrapper = styled(Box)(({ theme }) => ({
 
 export function CoverSection() {
   const imageUrl =
-    'https://res.cloudinary.com/dxfsa7foy/image/upload/v1755705635/fa2d4ce848666bc01533180bcaeb05df_u84myb.jpg'; // thay bằng ảnh cưới của anh
+    'https://res.cloudinary.com/dxfsa7foy/image/upload/v1755709089/A%CC%89nh_Cu%CC%9Bo%CC%9B%CC%81i_Ngoa%CC%80i_Tro%CC%9B%CC%80i_u5d1lo.jpg'; // thay bằng ảnh cưới của anh
 
   return (
     <RootStyle>
@@ -105,7 +106,7 @@ export function CoverSection() {
               mt: 1,
             }}
           >
-            Martin & Chloe
+            Minh & An
           </Typography>
         </motion.div>
 
