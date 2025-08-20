@@ -305,9 +305,9 @@ const handleMusicChoice = async (choice: boolean) => {
         <BibleSection />
         {/* <EventSection /> */}
         <WelcomeSection detailsRef={detailsRef} />
-        <CountdownSection />
         <EventDetailsSection />
         <GallerySection />
+        <CountdownSection />
         <RsvpSection />
         <WeddingGiftSection />
         {/* <ContactSection /> */}
