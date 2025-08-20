@@ -111,7 +111,7 @@ const itemVariants = {
       maxWidth={false}
       disableGutters
       sx={{
-        minHeight: '100vh',
+        height: '100vh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
