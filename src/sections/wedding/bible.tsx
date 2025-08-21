@@ -193,6 +193,7 @@ const GuestNameOverlay = styled('span')({ // Thay đổi thành span thông thư
     position: 'absolute',
     left: '50%',
     top: '30%',
+    width: '100%',
     transform: 'translate(-50%, -50%)',
     fontFamily: "'Oooh Baby', cursive",
     fontSize: '2rem',
