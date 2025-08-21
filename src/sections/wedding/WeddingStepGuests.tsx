@@ -93,7 +93,7 @@ const steps = [
 const WeddingStepGuests = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-    const urlPreview = 'https://an-ha-wedding.vercel.app/';
+    const urlPreview = 'https://minh-an-wedding2711.vercel.app/';
 
     const [guests, setGuests] = useState<Guest[]>([]);
     const [loading, setLoading] = useState(true);
