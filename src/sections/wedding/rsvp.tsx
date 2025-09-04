@@ -246,7 +246,7 @@ export function RsvpSection() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   
   // --- THAY THẾ 'YOUR_WEB_APP_URL_HERE' BẰNG URL BẠN ĐÃ SAO CHÉP TỪ APPS SCRIPT ---
-  const GOOGLE_SHEETS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwyMVrl_ig1qH37xgo1TxVI4EHxpb6pQq46pJG-zQml5kr7fW58FPjdknkawC1CLoqs/exec"; // Thay thế bằng URL thực tế của bạn
+  const GOOGLE_SHEETS_WEB_APP_URL = ""; // Thay thế bằng URL thực tế của bạn
   
   useEffect(() => {
     // Tự động reset form sau 5 giây nếu đã gửi thành công
