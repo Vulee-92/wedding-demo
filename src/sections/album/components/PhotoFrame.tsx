@@ -25,6 +25,7 @@ interface PhotoFrameProps {
   style?: React.CSSProperties;
   user?: string;
   avatar?: string;
+   onClick?: () => void; 
 }
 
 const PhotoFrame: React.FC<PhotoFrameProps> = ({

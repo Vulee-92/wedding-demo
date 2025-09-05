@@ -1,6 +1,6 @@
 // src/sections/album/Slideshow.tsx
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { Box, IconButton, Tooltip, Stack, Typography, useTheme, useMediaQuery, Button, ButtonGroup } from '@mui/material';
+import { Box, IconButton, Tooltip, Stack, Typography, useTheme, useMediaQuery, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -11,8 +11,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import WeddingBanner from './components/WeddingBanner';
-import PhotoFrame from './components/PhotoFrame';
-// import LoadingSlideshow from './LoadingSlideshow'; // Không cần import LoadingSlideshow nữa
+import PhotoBoothLayout from './components/PhotoBoothLayout';
 
 const APPS_SCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbzuWs-OIZQFDqKHrrsKsG0F9NemvKTq0iDkogowTvwUPc-Ps1vKtuCgd0JMYD4_H4io/exec';
@@ -35,6 +34,7 @@ interface SlideshowProps {
 
 type SlidePhase = 'loading' | 'musicConsent' | 'intro' | 'slideshow' | 'finalScroll';
 
+// Định nghĩa kiểu dữ liệu cho các hiệu ứng
 type TransitionVariant = {
   initial: object;
   animate: object;
@@ -47,6 +47,9 @@ const transitions: Record<string, TransitionVariant> = {
   rotateIn: { initial: { scale: 0.8, opacity: 0, rotate: -10 }, animate: { scale: 1, opacity: 1, rotate: 0 }, exit: { scale: 0.9, opacity: 0, rotate: 10 } },
   heartbeat: { initial: { scale: 0.9, opacity: 0 }, animate: { scale: [0.9, 1.03, 1], opacity: 1 }, exit: { scale: 0.95, opacity: 0 } },
 };
+
+// Tạo một mảng các key từ đối tượng transitions để truy cập an toàn
+const transitionKeys = Object.keys(transitions);
 
 const preloadImages = async (urls: string[]) => {
   await Promise.all(
@@ -88,11 +91,8 @@ const MusicContent = styled(motion.div)(({ theme }) => ({
   position: 'relative',
 }));
 
-const MusicButtonGroup = styled(Stack)(({ theme }) => ({
-  marginTop: theme.spacing(4),
-}));
+const MotionButtonGroup = motion(Stack);
 
-const MotionButtonGroup = motion(MusicButtonGroup);
 const Slideshow: React.FC<SlideshowProps> = ({ 
   imageUrls: propsImageUrls, 
   initialIndex = 0, 
@@ -130,12 +130,9 @@ const Slideshow: React.FC<SlideshowProps> = ({
       const uniqueUrls = [...new Set([...urls])];
       await preloadImages(uniqueUrls);
       setImageUrls(uniqueUrls);
-
-      // Chuyển sang màn hình hỏi người dùng có muốn phát nhạc
       setCurrentPhase('musicConsent');
     } catch (err) {
       console.error('Error loading images:', err);
-      // Xử lý lỗi, có thể chuyển thẳng đến banner
       setCurrentPhase('intro');
     }
   }, [propsImageUrls]);
@@ -184,7 +181,9 @@ const Slideshow: React.FC<SlideshowProps> = ({
         }, FINAL_SCROLL_DURATION);
       } else {
         setCurrentIndex(prev => (prev + 1) % imageUrls.length);
-        setCurrentTransition(transitions[Object.keys(transitions)[Math.floor(Math.random() * Object.keys(transitions).length)]]);
+        // Sửa lỗi ở đây: truy cập mảng key an toàn hơn
+        const randomTransitionKey = transitionKeys[Math.floor(Math.random() * transitionKeys.length)];
+        setCurrentTransition(transitions[randomTransitionKey]);
       }
     }, DISPLAY_DURATION);
   }, [currentIndex, imageUrls.length, onClose]);
@@ -225,204 +224,20 @@ const Slideshow: React.FC<SlideshowProps> = ({
   const handleNext = useCallback(() => {
     stopInterval();
     setCurrentIndex(prev => (prev + 1) % imageUrls.length);
-    setCurrentTransition(transitions[Object.keys(transitions)[Math.floor(Math.random() * Object.keys(transitions).length)]]);
+    // Sửa lỗi ở đây: truy cập mảng key an toàn hơn
+    const randomTransitionKey = transitionKeys[Math.floor(Math.random() * transitionKeys.length)];
+    setCurrentTransition(transitions[randomTransitionKey]);
     if (isPlaying) startInterval();
   }, [imageUrls.length, isPlaying, startInterval, stopInterval]);
 
   const handlePrevious = useCallback(() => {
     stopInterval();
     setCurrentIndex(prev => (prev - 1 + imageUrls.length) % imageUrls.length);
-    setCurrentTransition(transitions[Object.keys(transitions)[Math.floor(Math.random() * Object.keys(transitions).length)]]);
+    // Sửa lỗi ở đây: truy cập mảng key an toàn hơn
+    const randomTransitionKey = transitionKeys[Math.floor(Math.random() * transitionKeys.length)];
+    setCurrentTransition(transitions[randomTransitionKey]);
     if (isPlaying) startInterval();
   }, [imageUrls.length, isPlaying, startInterval, stopInterval]);
-
-  const renderPhotoBoothLayout = useCallback(() => {
-    if (imageUrls.length === 0) return null;
-    
-    if (currentPhase === 'finalScroll') {
-      const extendedPhotos = [...imageUrls, ...imageUrls, ...imageUrls];
-      
-      const column1 = extendedPhotos.filter((_, index) => index % 3 === 0);
-      const column2 = extendedPhotos.filter((_, index) => index % 3 === 1);
-      const column3 = extendedPhotos.filter((_, index) => index % 3 === 2);
-
-      return (
-        <AnimatePresence mode="wait">
-          <motion.div
-            key="final-scroll-effect"
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-            style={{ 
-              position: 'fixed',
-              inset: 0,
-              backgroundColor: 'black',
-              overflow: 'hidden',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Box sx={{ 
-              display: 'flex', 
-              height: '100%', 
-              width: '100%', 
-              maxWidth: '1200px',
-              overflow: 'hidden',
-              p: 2,
-            }}>
-              {/* Cột 1: Cuộn lên */}
-              <Box sx={{ 
-                flex: 1, 
-                display: 'flex', 
-                flexDirection: 'column', 
-                gap: theme.spacing(1), 
-                px: theme.spacing(1), 
-                animation: `slideUp ${FINAL_SCROLL_DURATION / 1000}s linear forwards`,
-                position: 'relative',
-                height: '200%',
-                transform: 'translateY(0%)',
-              }}>
-                {column1.map((photo, index) => (
-                  <PhotoFrame 
-                    key={`col1-${index}`} 
-                    src={photo} 
-                    rotation={Math.random() * 6 - 3}
-                       size={isMobile ? "super_small": "medium"}
-                  />
-                ))}
-              </Box>
-              {/* Cột 2: Cuộn xuống */}
-              <Box sx={{ 
-                flex: 1, 
-                display: 'flex', 
-                flexDirection: 'column', 
-                gap: theme.spacing(1), 
-                px: theme.spacing(1), 
-                animation: `slideDown ${FINAL_SCROLL_DURATION / 1000}s linear forwards`,
-                position: 'relative',
-                height: '200%',
-                transform: 'translateY(-100%)',
-              }}>
-                {column2.map((photo, index) => (
-                  <PhotoFrame 
-                    key={`col2-${index}`} 
-                    src={photo} 
-                    rotation={Math.random() * 6 - 3} 
-                       size={isMobile ? "super_small": "medium"} 
-                  />
-                ))}
-              </Box>
-              {/* Cột 3: Cuộn lên */}
-              <Box sx={{ 
-                flex: 1, 
-                display: 'flex', 
-                flexDirection: 'column', 
-                gap: theme.spacing(1), 
-                px: theme.spacing(1), 
-                animation: `slideUp ${FINAL_SCROLL_DURATION / 1000}s linear forwards`,
-                position: 'relative',
-                height: '200%',
-                transform: 'translateY(0%)',
-              }}>
-                {column3.map((photo, index) => (
-                  <PhotoFrame 
-                    key={`col3-${index}`} 
-                    src={photo} 
-                    rotation={Math.random() * 6 - 3} 
-                       size={isMobile ? "super_small": "medium"} 
-                  />
-                ))}
-              </Box>
-            </Box>
-            <style>{`
-              @keyframes slideUp { 
-                0% { transform: translateY(0%); } 
-                100% { transform: translateY(-50%); } 
-              }
-              @keyframes slideDown { 
-                0% { transform: translateY(-50%); } 
-                100% { transform: translateY(0%); } 
-              }
-            `}</style>
-          </motion.div>
-        </AnimatePresence>
-      );
-    }
-    
-    if (isMobile) {
-      return (
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`mobile-photo-${currentIndex}`}
-            initial={currentTransition.initial}
-            animate={currentTransition.animate}
-            exit={currentTransition.exit}
-            transition={{ duration: 1.2, ease: 'easeInOut' }}
-            style={{ 
-              width: '100%', 
-              height: '100%', 
-              display: 'flex', 
-              justifyContent: 'center', 
-              alignItems: 'center' 
-            }}
-          >
-            <PhotoFrame src={imageUrls[currentIndex]} rotation={Math.random() * 8 - 4} size="small" />
-          </motion.div>
-        </AnimatePresence>
-      );
-    }
-    
-    const desktopLayouts = [
-      () => (
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`desktop-layout-single-${currentIndex}`}
-            initial={currentTransition.initial}
-            animate={currentTransition.animate}
-            exit={currentTransition.exit}
-            transition={{ duration: 1.2, ease: 'easeInOut' }}
-            style={{ 
-              width: '100%', 
-              height: '100%', 
-              display: 'flex', 
-              justifyContent: 'center', 
-              alignItems: 'center' 
-            }}
-          >
-            <PhotoFrame src={imageUrls[currentIndex]} rotation={Math.random() * 6 - 3} size="large" />
-          </motion.div>
-        </AnimatePresence>
-      ),
-      () => (
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`desktop-layout-double-${currentIndex}`}
-            initial={currentTransition.initial}
-            animate={currentTransition.animate}
-            exit={currentTransition.exit}
-            transition={{ duration: 1.2, ease: 'easeInOut' }}
-            style={{ 
-              width: '100%', 
-              height: '100%', 
-              display: 'flex', 
-              justifyContent: 'center', 
-              alignItems: 'center' 
-            }}
-          >
-            <Stack direction="row" spacing={4} sx={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-              <PhotoFrame src={imageUrls[currentIndex]} rotation={Math.random() * 8 - 4} size="medium" />
-              <PhotoFrame src={imageUrls[(currentIndex + 1) % imageUrls.length]} rotation={Math.random() * 8 - 4} size="medium" delay={0.3} />
-            </Stack>
-          </motion.div>
-        </AnimatePresence>
-      ),
-    ];
-
-    const randomLayout = desktopLayouts[Math.floor(Math.random() * desktopLayouts.length)];
-    return randomLayout();
-  }, [currentIndex, imageUrls, isMobile, currentTransition, currentPhase, theme]);
 
   return (
     <Box
@@ -554,18 +369,12 @@ const Slideshow: React.FC<SlideshowProps> = ({
 
         {(currentPhase === 'slideshow' || currentPhase === 'finalScroll') && (
           <motion.div key="slideshow" {...transitions.fadeIn} style={{ width: '100%', height: '100%' }}>
-            <Box
-              sx={{
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                p: isMobile ? 1 : 4,
-              }}
-            >
-              {renderPhotoBoothLayout()}
-            </Box>
+            <PhotoBoothLayout
+              imageUrls={imageUrls}
+              currentPhase={currentPhase}
+              currentIndex={currentIndex}
+              currentTransition={currentTransition}
+            />
 
             {currentPhase === 'slideshow' && (
               <>
